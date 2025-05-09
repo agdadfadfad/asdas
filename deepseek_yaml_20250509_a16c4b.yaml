@@ -1,0 +1,104 @@
+openapi: 3.0.0
+info:
+  title: OpenWeatherMap Current Weather API
+  version: 1.0.0
+  description: Get current weather data for any location
+servers:
+  - url: https://api.openweathermap.org/data/2.5
+paths:
+  /weather:
+    get:
+      summary: Get current weather
+      operationId: getCurrentWeather
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: "City and country code (e.g., 'London,uk')"
+          schema:
+            type: string
+          example: "London,uk"
+        - name: APPID
+          in: query
+          required: true
+          description: "Your API key"
+          schema:
+            type: string
+          example: "cd8ca7132e1cc34d464487a055877cb8"
+        - name: units
+          in: query
+          description: "Units of measurement (metric/imperial/standard)"
+          schema:
+            type: string
+            enum: [metric, imperial, standard]
+          example: "metric"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeatherResponse'
+        '401':
+          description: Invalid API key
+        '404':
+          description: City not found
+components:
+  schemas:
+    WeatherResponse:
+      type: object
+      properties:
+        coord:
+          type: object
+          properties:
+            lon:
+              type: number
+              example: -0.1257
+            lat:
+              type: number
+              example: 51.5085
+        weather:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 801
+              main:
+                type: string
+                example: "Clouds"
+              description:
+                type: string
+                example: "few clouds"
+              icon:
+                type: string
+                example: "02d"
+        main:
+          type: object
+          properties:
+            temp:
+              type: number
+              example: 282.55
+            feels_like:
+              type: number
+              example: 281.86
+            temp_min:
+              type: number
+              example: 280.37
+            temp_max:
+              type: number
+              example: 284.26
+            pressure:
+              type: integer
+              example: 1023
+            humidity:
+              type: integer
+              example: 81
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: query
+      name: APPID
+security:
+  - ApiKeyAuth: []
