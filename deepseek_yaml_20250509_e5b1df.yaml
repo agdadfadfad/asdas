@@ -1,0 +1,58 @@
+openapi: 3.0.0
+info:
+  title: OpenWeatherMap London Endpoint
+  version: 1.0.0
+  description: Hardcoded for London weather (only API key required)
+servers:
+  - url: https://api.openweathermap.org/data/2.5/weather?q=London,uk  # Hardcoded location
+paths:
+  /:
+    get:
+      summary: Get London weather
+      parameters:
+        - name: APPID  # Note: Your URL uses APPID (not appid)
+          in: query
+          required: true
+          description: "API key (demo: cd8ca7132e1cc34d464487a055877cb8)"
+          schema:
+            type: string
+          example: "cd8ca7132e1cc34d464487a055877cb8"
+        - name: units
+          in: query
+          required: false
+          description: "Hardcoded to metric in example URL"
+          schema:
+            type: string
+            enum: [metric, imperial, standard]
+          example: "metric"
+      responses:
+        '200':
+          description: London weather data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  coord:
+                    type: object
+                    properties:
+                      lon: { type: number, example: -0.13 }
+                      lat: { type: number, example: 51.51 }
+                  weather:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        main: { type: string, example: "Rain" }
+                  main:
+                    type: object
+                    properties:
+                      temp: { type: number, example: 286.92 }
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: query
+      name: APPID  # Must match parameter name
+security:
+  - ApiKeyAuth: []
