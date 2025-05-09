@@ -1,29 +1,24 @@
 openapi: 3.0.0
 info:
-  title: OpenWeatherMap London
+  title: OpenWeatherMap - Fixed London
   version: 1.0.0
-servers:
-  - url: https://api.openweathermap.org/data/2.5/weather?q=London,uk  # Hardcoded location
 paths:
-  /:
+  /weather:
     get:
-      summary: Get London weather
       parameters:
+        - name: q
+          in: query
+          required: true
+          schema: 
+            type: string
+            default: "London,uk"  # Critical for Informatica
+          example: "London,uk"
         - name: APPID
           in: query
           required: true
-          description: "API key (example: cd8ca7132e1cc34d464487a055877cb8)"
-          schema:
-            type: string
-          example: "cd8ca7132e1cc34d464487a055877cb8"
+          schema: {type: string}
       responses:
         '200':
           description: Success
-components:
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: query
-      name: APPID
-security:
-  - ApiKeyAuth: []
+servers:
+  - url: https://api.openweathermap.org/data/2.5
